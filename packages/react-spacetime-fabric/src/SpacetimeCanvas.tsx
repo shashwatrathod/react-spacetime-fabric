@@ -137,30 +137,49 @@ const SpacetimeCanvas: React.FC<SpacetimeCanvasProps> = ({ config, className }) 
     if (!ctx) return;
 
     const simulation = simulationRef.current!;
+    const container = canvas.parentElement;
 
-    const handleResize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
+    const updateCanvasSize = () => {
+      if (!container) return;
+      
+      // Get the actual container dimensions
+      const rect = container.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
       simulation.resize(canvas.width, canvas.height);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      simulation.setMouse(e.clientX, e.clientY);
+      // Get mouse position relative to canvas
+      const rect = canvas.getBoundingClientRect();
+      simulation.setMouse(e.clientX - rect.left, e.clientY - rect.top);
     };
 
     const handleTouchMove = (e: TouchEvent) => {
         e.preventDefault(); 
         if(e.touches.length > 0) {
-            simulation.setMouse(e.touches[0].clientX, e.touches[0].clientY);
+            const rect = canvas.getBoundingClientRect();
+            simulation.setMouse(
+              e.touches[0].clientX - rect.left, 
+              e.touches[0].clientY - rect.top
+            );
         }
     };
 
-    window.addEventListener('resize', handleResize);
+    // Use ResizeObserver to track container size changes
+    const resizeObserver = new ResizeObserver(() => {
+      updateCanvasSize();
+    });
+
+    if (container) {
+      resizeObserver.observe(container);
+    }
+
     window.addEventListener('mousemove', handleMouseMove);
     canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
     
     // Initial resize to set up grid
-    handleResize();
+    updateCanvasSize();
 
     const render = () => {
       const now = Date.now();
@@ -180,7 +199,7 @@ const SpacetimeCanvas: React.FC<SpacetimeCanvasProps> = ({ config, className }) 
     render();
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      resizeObserver.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       canvas.removeEventListener('touchmove', handleTouchMove);
       cancelAnimationFrame(animationRef.current);
