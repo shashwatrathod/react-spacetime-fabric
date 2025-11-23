@@ -1,6 +1,6 @@
 {
   "name": "react-spacetime-fabric",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Interactive spacetime fabric simulation component for React with realistic physics",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",

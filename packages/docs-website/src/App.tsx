@@ -49,6 +49,18 @@ const App: React.FC = () => {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [isDocsOpen, setIsDocsOpen] = useState(false);
   const [showIntro, setShowIntro] = useState(true);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyConfig = async () => {
+    const configString = `const config: SimulationConfig = ${JSON.stringify(config, null, 2)};`;
+    try {
+      await navigator.clipboard.writeText(configString);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
+  };
 
   return (
     <div className="relative w-full h-screen bg-black overflow-hidden font-sans text-gray-200">
@@ -112,7 +124,7 @@ const App: React.FC = () => {
 
       {/* Settings Panel */}
       <div className={`fixed right-0 top-0 h-full w-80 bg-[#0a0a0a]/95 backdrop-blur-xl border-l border-white/5 transform transition-transform duration-500 ease-[cubic-bezier(0.19,1,0.22,1)] z-50 p-8 ${isPanelOpen ? 'translate-x-0' : 'translate-x-full'} overflow-y-auto`}>
-        <div className="flex justify-between items-center mb-10">
+        <div className="flex justify-between items-center mb-6">
           <h3 className="text-sm font-bold uppercase tracking-widest text-white/80">Parameters</h3>
           <button onClick={() => setIsPanelOpen(false)} className="text-white/40 hover:text-white transition-colors">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -121,6 +133,29 @@ const App: React.FC = () => {
             </svg>
           </button>
         </div>
+        
+        {/* Copy Config Button */}
+        <button
+          onClick={handleCopyConfig}
+          className="w-full mb-8 flex items-center justify-center gap-2 px-4 py-3 rounded-lg border border-cyan-500/50 bg-cyan-500/10 text-cyan-400 text-xs uppercase tracking-widest hover:bg-cyan-500/20 transition-all group"
+        >
+          {copied ? (
+            <>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Copied Config!
+            </>
+          ) : (
+            <>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+              </svg>
+              Copy Config
+            </>
+          )}
+        </button>
 
         <div className="space-y-10">
           {/* Gravity Strength */}
