@@ -1,0 +1,5 @@
+{
+  "name": "Spacetime Fabric Visualizer",
+  "description": "An interactive top-down simulation of spacetime curvature using a physics-based grid system.",
+  "requestFramePermissions": []
+}
