@@ -6,9 +6,12 @@
     "dev": "pnpm --filter spacetime-fabric-docs dev",
     "build:lib": "pnpm --filter react-spacetime-fabric build",
     "build:docs": "pnpm --filter spacetime-fabric-docs build",
-    "build": "pnpm build:lib && pnpm build:docs"
+    "build": "pnpm build:lib && pnpm build:docs",
+    "changeset": "changeset",
+    "version-packages": "changeset version"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.29.7",
     "pnpm": "^9.0.0"
   }
 }
