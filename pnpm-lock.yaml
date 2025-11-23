@@ -24,8 +24,8 @@ importers:
         specifier: ^19.2.0
         version: 19.2.0(react@19.2.0)
       react-spacetime-fabric:
-        specifier: ^0.1.0
-        version: 0.1.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        specifier: ^0.1.1
+        version: 0.1.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
     devDependencies:
       '@types/node':
         specifier: ^22.14.0
@@ -830,8 +830,8 @@ packages:
     resolution: {integrity: sha512-QgT5//D3jfjJb6Gsjxv0Slpj23ip+HtOpnNgnb2S5zU3CB26G/IDPGoy4RJB42wzFE46DRsstbW6tKHoKbhAxw==}
     engines: {node: '>=0.10.0'}
 
-  react-spacetime-fabric@0.1.0:
-    resolution: {integrity: sha512-cAINpBy6RXe9G3WdOqxEBIgyMpAUScCrE7u7SFTVtXSs3NnhFdWhF/IqKdo90As1SvlTJ+LJmk1A0ftpjWp5lg==}
+  react-spacetime-fabric@0.1.1:
+    resolution: {integrity: sha512-qQO879H0z+hxgo2l1H4dUMAtB3FGThZRds1Dd6C1TQdlrPF4wWGDtUKzO8qrHmzN/4HLN3oJX9rxJVfM8cwQ7g==}
     peerDependencies:
       react: ^18.0.0 || ^19.0.0
       react-dom: ^18.0.0 || ^19.0.0
@@ -1577,7 +1577,7 @@ snapshots:
 
   react-refresh@0.18.0: {}
 
-  react-spacetime-fabric@0.1.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
+  react-spacetime-fabric@0.1.1(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
     dependencies:
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)

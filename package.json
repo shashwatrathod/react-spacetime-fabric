@@ -1,11 +1,11 @@
 {
   "name": "react-spacetime-fabric",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter docs-website dev",
+    "dev": "pnpm --filter spacetime-fabric-docs dev",
     "build:lib": "pnpm --filter react-spacetime-fabric build",
-    "build:docs": "pnpm --filter docs-website build",
+    "build:docs": "pnpm --filter spacetime-fabric-docs build",
     "build": "pnpm build:lib && pnpm build:docs"
   },
   "devDependencies": {

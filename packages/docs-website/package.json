@@ -1,7 +1,7 @@
 {
   "name": "spacetime-fabric-docs",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
     "lucide-react": "^0.554.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-spacetime-fabric": "^0.1.0"
+    "react-spacetime-fabric": "^0.1.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

@@ -17,60 +17,88 @@ export interface Stick {
   color?: string;
 }
 
-/**
- * Configuration options for the Spacetime Simulation
- */
-export interface SimulationConfig {
+export interface GridConfig {
   /** Distance between grid points in pixels */
-  gridSpacing: number;
+  spacing: number;
   /** Stiffness of the grid connections (0-1) */
   stiffness: number;
   /** Damping factor for particle motion (0-1) */
   damping: number;
-  /** Radius of the mouse/gravity influence in pixels */
-  mouseInteractionRadius: number;
+}
+
+export interface GravityConfig {
   /** Strength of the gravity force. Positive for attraction, negative for repulsion */
-  mouseForce: number;
+  strength: number;
+  /** Radius of the mouse/gravity influence in pixels */
+  radius: number;
   /** Irregularity of the gravity field radius (0-2) */
-  gravityDivergence: number;
+  divergence: number;
   /** Latency in ms before gravity activates after cursor movement */
-  cursorActivationLatency: number;
-  /** Enable pulsating mass effect */
-  pulsing: boolean;
-  /** Multiplier for breathing frequency */
-  pulsingSpeed: number;
-  /** Multiplier for breathing amplitude (0-1) */
-  pulsingDepth: number;
+  activationLatency: number;
+}
+
+export interface SignalConfig {
   /** If true, gravity propagates at finite speed */
-  enableSignalDelay: boolean;
+  enabled: boolean;
   /** Speed of gravity propagation in pixels per frame */
-  signalSpeed: number;
+  speed?: number;
   /** Randomness in signal propagation (0-1+) */
-  signalRandomness: number;
-  /** Whether to render the particles */
-  renderPoints: boolean;
-  /** Whether to render the grid lines */
-  renderLines: boolean;
+  randomness?: number;
+}
+
+export interface PulsingConfig {
+  /** Enable pulsating mass effect */
+  enabled: boolean;
+  /** Multiplier for breathing frequency */
+  speed?: number;
+  /** Multiplier for breathing amplitude (0-1) */
+  depth?: number;
+}
+
+export interface MotionRenderConfig {
   /** Only render particles that are moving */
-  renderMotionOnly: boolean;
+  enabled: boolean;
   /** Minimum speed to be visible in motion-only mode */
-  motionSpeedThreshold: number;
+  speedThreshold?: number;
   /** Minimum displacement to be visible in motion-only mode */
-  motionDisplacementThreshold: number;
+  displacementThreshold?: number;
+}
+
+export interface ParticleAppearanceConfig {
   /** Base radius of particles */
-  particleBaseSize: number;
+  baseSize: number;
   /** Base opacity of particles (0-1) */
-  particleBaseOpacity: number;
+  baseOpacity: number;
   /** Random variation in particle size */
-  particleSizeVariance: number;
+  sizeVariance: number;
   /** Random variation in particle opacity */
-  particleOpacityVariance: number;
+  opacityVariance: number;
   /** Shape of the particles */
-  particleShape: 'circle' | 'square' | 'diamond' | 'star' | 'oval';
-  /** Use custom color instead of theme */
-  overrideThemeColor: boolean;
-  /** Hex color for particles if overrideThemeColor is true */
-  customParticleColor: string;
+  shape: 'circle' | 'square' | 'diamond' | 'star' | 'oval';
+  /** Custom color for particles. If provided, overrides theme color. */
+  color?: string;
+}
+
+export interface RenderConfig {
+  /** Whether to render the particles */
+  points: boolean;
+  /** Whether to render the grid lines */
+  lines: boolean;
+  /** Configuration for motion-only rendering */
+  motion?: MotionRenderConfig;
+  /** Configuration for particle appearance */
+  particles: ParticleAppearanceConfig;
   /** Predefined color scheme */
   colorScheme: 'neon' | 'matrix' | 'sunset';
+}
+
+/**
+ * Configuration options for the Spacetime Simulation
+ */
+export interface SimulationConfig {
+  grid: GridConfig;
+  gravity: GravityConfig;
+  signal: SignalConfig;
+  pulsing: PulsingConfig;
+  render: RenderConfig;
 }

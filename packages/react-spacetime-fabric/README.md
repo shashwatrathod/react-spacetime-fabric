@@ -2,8 +2,6 @@
 
 An interactive React component that renders a physics-based spacetime fabric simulation, visualizing gravitational effects, time dilation, and relativistic phenomena.
 
-![Spacetime Fabric Simulation](https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6)
-
 ## Features
 
 - 🌌 **Real-time Physics Simulation**: Mass-spring-damper system with Verlet integration
@@ -29,18 +27,35 @@ pnpm add react-spacetime-fabric
 import { SpacetimeCanvas, SimulationConfig } from 'react-spacetime-fabric';
 
 const config: SimulationConfig = {
-  gridSpacing: 35,
-  mouseForce: 10,
-  mouseInteractionRadius: 280,
-  stiffness: 0.2,
-  damping: 0.92,
-  enableSignalDelay: false,
-  signalSpeed: 15,
-  renderPoints: true,
-  renderLines: true,
-  particleShape: 'circle',
-  colorScheme: 'neon',
-  // ... see Configuration below for all options
+  grid: {
+    spacing: 35,
+    stiffness: 0.2,
+    damping: 0.92
+  },
+  gravity: {
+    strength: 10,
+    radius: 280,
+    divergence: 0,
+    activationLatency: 0
+  },
+  render: {
+    points: true,
+    lines: true,
+    particles: {
+      baseSize: 1.2,
+      baseOpacity: 0.4,
+      sizeVariance: 0,
+      opacityVariance: 0,
+      shape: 'circle'
+    },
+    colorScheme: 'neon'
+  },
+  signal: {
+    enabled: false
+  },
+  pulsing: {
+    enabled: false
+  }
 };
 
 function App() {
@@ -54,49 +69,65 @@ function App() {
 
 ## Configuration
 
-The `SimulationConfig` interface provides extensive control over the physics simulation and visual appearance:
+The `SimulationConfig` interface provides extensive control over the physics simulation and visual appearance, organized into logical groups:
 
-### Physics Parameters
+### Grid Configuration (`grid`)
 
 | Property | Type | Range | Default | Description |
 |----------|------|-------|---------|-------------|
-| `gridSpacing` | `number` | 20-80 | 35 | Distance between grid points (affects performance) |
+| `spacing` | `number` | 20-80 | 35 | Distance between grid points (affects performance) |
 | `stiffness` | `number` | 0.0-1.0 | 0.2 | Grid connection stiffness (>0.5 may be unstable) |
 | `damping` | `number` | 0.0-1.0 | 0.92 | Energy dissipation factor |
-| `mouseForce` | `number` | -20 to 40 | 10 | Gravitational force strength (negative = repulsion) |
-| `mouseInteractionRadius` | `number` | 100-600 | 280 | Radius of gravitational influence |
-| `gravityDivergence` | `number` | 0-2 | 0 | Angular asymmetry in gravitational field |
 
-### Relativistic Effects
+### Gravity Configuration (`gravity`)
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `enableSignalDelay` | `boolean` | false | Enable finite signal speed (simulates light-speed constraints) |
-| `signalSpeed` | `number` | 15 | Speed of gravity propagation (px/frame) |
-| `signalRandomness` | `number` | 0 | Spatial variance in signal propagation (0-2) |
+| Property | Type | Range | Default | Description |
+|----------|------|-------|---------|-------------|
+| `strength` | `number` | -20 to 40 | 10 | Gravitational force strength (negative = repulsion) |
+| `radius` | `number` | 100-600 | 280 | Radius of gravitational influence |
+| `divergence` | `number` | 0-2 | 0 | Angular asymmetry in gravitational field |
+| `activationLatency` | `number` | 0-2000 | 0 | Delay before gravity activates (ms) |
 
-### Visual Options
+### Signal Propagation (`signal`)
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `renderPoints` | `boolean` | true | Show grid particles |
-| `renderLines` | `boolean` | true | Show grid connections |
-| `renderMotionOnly` | `boolean` | false | Only render moving particles |
-| `particleShape` | `'circle' \| 'oval' \| 'square' \| 'diamond' \| 'star'` | 'circle' | Particle shape |
-| `particleBaseSize` | `number` | 1.2 | Base particle size |
-| `particleBaseOpacity` | `number` | 0.4 | Base particle opacity |
+| `enabled` | `boolean` | false | Enable finite signal speed (simulates light-speed constraints) |
+| `speed` | `number` | 15 | Speed of gravity propagation (px/frame) |
+| `randomness` | `number` | 0 | Spatial variance in signal propagation (0-2) |
+
+### Pulsing Effect (`pulsing`)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `enabled` | `boolean` | false | Enable breathing/pulsing mass effect |
+| `speed` | `number` | 1 | Frequency of pulsing (0.1-3) |
+| `depth` | `number` | 0.35 | Amplitude of pulsing (0.05-0.8) |
+
+### Rendering Options (`render`)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `points` | `boolean` | true | Show grid particles |
+| `lines` | `boolean` | true | Show grid connections |
 | `colorScheme` | `'neon' \| 'matrix' \| 'sunset'` | 'neon' | Predefined color scheme |
-| `overrideThemeColor` | `boolean` | false | Use custom color instead of theme |
-| `customParticleColor` | `string` | '#ffffff' | Hex color for custom theme |
 
-### Advanced Effects
+#### Particle Appearance (`render.particles`)
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `pulsing` | `boolean` | false | Enable breathing/pulsing mass effect |
-| `pulsingSpeed` | `number` | 1 | Frequency of pulsing (0.1-3) |
-| `pulsingDepth` | `number` | 0.35 | Amplitude of pulsing (0.05-0.8) |
-| `cursorActivationLatency` | `number` | 0 | Delay before gravity activates (ms) |
+| `shape` | `'circle' \| 'oval' \| 'square' \| 'diamond' \| 'star'` | 'circle' | Particle shape |
+| `baseSize` | `number` | 1.2 | Base particle size |
+| `baseOpacity` | `number` | 0.4 | Base particle opacity |
+| `color` | `string` | undefined | Custom hex color (overrides theme if set) |
+
+#### Motion-Only Rendering (`render.motion`)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `enabled` | `boolean` | false | Only render moving particles |
+| `speedThreshold` | `number` | 0.5 | Minimum speed to be visible |
+| `displacementThreshold` | `number` | 0.6 | Minimum displacement to be visible |
 
 ## Examples
 
@@ -104,32 +135,23 @@ The `SimulationConfig` interface provides extensive control over the physics sim
 
 ```tsx
 const minimalConfig: SimulationConfig = {
-  gridSpacing: 40,
-  mouseForce: 10,
-  mouseInteractionRadius: 200,
-  stiffness: 0.2,
-  damping: 0.92,
-  enableSignalDelay: false,
-  signalSpeed: 15,
-  signalRandomness: 0,
-  renderPoints: true,
-  renderLines: true,
-  renderMotionOnly: false,
-  motionSpeedThreshold: 0.5,
-  motionDisplacementThreshold: 0.6,
-  particleBaseSize: 1.2,
-  particleBaseOpacity: 0.4,
-  particleSizeVariance: 0,
-  particleOpacityVariance: 0,
-  particleShape: 'circle',
-  colorScheme: 'neon',
-  overrideThemeColor: false,
-  customParticleColor: '#ffffff',
-  gravityDivergence: 0,
-  cursorActivationLatency: 0,
-  pulsing: false,
-  pulsingSpeed: 1,
-  pulsingDepth: 0.35,
+  grid: { spacing: 40, stiffness: 0.2, damping: 0.92 },
+  gravity: { strength: 10, radius: 200, divergence: 0, activationLatency: 0 },
+  render: {
+    points: true,
+    lines: true,
+    particles: {
+      baseSize: 1.2,
+      baseOpacity: 0.4,
+      sizeVariance: 0,
+      opacityVariance: 0,
+      shape: 'circle'
+    },
+    colorScheme: 'neon',
+    motion: { enabled: false }
+  },
+  signal: { enabled: false },
+  pulsing: { enabled: false }
 };
 ```
 
@@ -138,16 +160,29 @@ const minimalConfig: SimulationConfig = {
 ```tsx
 const blackHoleConfig: SimulationConfig = {
   ...minimalConfig,
-  mouseForce: 35,
-  mouseInteractionRadius: 400,
-  enableSignalDelay: true,
-  signalSpeed: 12,
-  pulsing: true,
-  pulsingSpeed: 0.8,
-  pulsingDepth: 0.5,
-  gravityDivergence: 0.3,
-  particleShape: 'star',
-  colorScheme: 'sunset',
+  gravity: {
+    ...minimalConfig.gravity,
+    strength: 35,
+    radius: 400,
+    divergence: 0.3
+  },
+  signal: {
+    enabled: true,
+    speed: 12
+  },
+  pulsing: {
+    enabled: true,
+    speed: 0.8,
+    depth: 0.5
+  },
+  render: {
+    ...minimalConfig.render,
+    particles: {
+      ...minimalConfig.render.particles,
+      shape: 'star'
+    },
+    colorScheme: 'sunset'
+  }
 };
 ```
 
@@ -156,9 +191,18 @@ const blackHoleConfig: SimulationConfig = {
 ```tsx
 const repulsionConfig: SimulationConfig = {
   ...minimalConfig,
-  mouseForce: -15,
-  colorScheme: 'matrix',
-  particleShape: 'diamond',
+  gravity: {
+    ...minimalConfig.gravity,
+    strength: -15
+  },
+  render: {
+    ...minimalConfig.render,
+    colorScheme: 'matrix',
+    particles: {
+      ...minimalConfig.render.particles,
+      shape: 'diamond'
+    }
+  }
 };
 ```
 
@@ -179,8 +223,8 @@ interface SpacetimeCanvasProps {
 ## Performance Considerations
 
 - **Grid Spacing**: Lower values (20-30px) create more particles and are significantly more CPU-intensive. Use 35-50px for better performance.
-- **Signal Delay**: Enabling `enableSignalDelay` adds ~20% CPU overhead due to historical mouse position tracking.
-- **Motion-Only Rendering**: Setting `renderMotionOnly: true` can reduce render time by 50-70% by only drawing moving particles.
+- **Signal Delay**: Enabling `signal.enabled` adds ~20% CPU overhead due to historical mouse position tracking.
+- **Motion-Only Rendering**: Setting `render.motion.enabled: true` can reduce render time by 50-70% by only drawing moving particles.
 
 ## Browser Compatibility
 
@@ -205,6 +249,6 @@ MIT © Shashwat Rathod
 
 ## Links
 
-- [Documentation Website](https://spacetime-fabric-docs.vercel.app) *(coming soon)*
+- [Documentation Website](https://spacetime-fabric-docs.vercel.app) *(deployment pending)*
 - [GitHub Repository](https://github.com/shashwatrathod/react-spacetime-fabric)
-- [NPM Package](https://www.npmjs.com/package/react-spacetime-fabric)
+- [NPM Package](https://www.npmjs.com/package/react-spacetime-fabric) *(not yet published)*

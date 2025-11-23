@@ -32,7 +32,7 @@ export class SpacetimeSimulation {
     this.points = [];
     this.sticks = [];
     
-    const spacing = this.config.gridSpacing;
+    const spacing = this.config.grid.spacing;
     const padding = 150; 
     const cols = Math.ceil((this.width + padding * 2) / spacing);
     const rows = Math.ceil((this.height + padding * 2) / spacing);
@@ -79,18 +79,25 @@ export class SpacetimeSimulation {
 
   update(pulsingPhase: number) {
     const { 
-        mouseInteractionRadius, 
-        mouseForce, 
-        gravityDivergence,
-        damping, 
-        stiffness, 
-        pulsing, 
-        pulsingDepth,
-        enableSignalDelay,
-        signalSpeed,
-        signalRandomness,
-        cursorActivationLatency
-    } = this.config;
+        radius: mouseInteractionRadius, 
+        strength: mouseForce, 
+        divergence: gravityDivergence,
+        activationLatency: cursorActivationLatency
+    } = this.config.gravity;
+
+    const { damping, stiffness } = this.config.grid;
+    
+    const { 
+        enabled: pulsing, 
+        depth: pulsingDepth = 0.1,
+        speed: pulsingSpeed = 1
+    } = this.config.pulsing;
+
+    const { 
+        enabled: enableSignalDelay, 
+        speed: signalSpeed = 15, 
+        randomness: signalRandomness = 0 
+    } = this.config.signal;
 
     const now = Date.now();
     const timeSinceMove = now - this.lastMouseMoveTime;
@@ -169,7 +176,7 @@ export class SpacetimeSimulation {
 
           if (pulsing) {
              const delaySec = delayFrames * 0.016; 
-             const retardedPhase = pulsingPhase - (delaySec * 1.25 * this.config.pulsingSpeed);
+             const retardedPhase = pulsingPhase - (delaySec * 1.25 * (this.config.pulsing.speed ?? 1));
              effectiveForce = calculateForce(activeMouseForce, retardedPhase);
           } else {
               effectiveForce = activeMouseForce;
@@ -233,21 +240,29 @@ export class SpacetimeSimulation {
   draw(ctx: CanvasRenderingContext2D) {
     ctx.clearRect(0, 0, this.width, this.height);
     const { 
-        renderLines, 
-        renderPoints, 
+        lines: renderLines, 
+        points: renderPoints, 
         colorScheme, 
-        mouseInteractionRadius, 
-        renderMotionOnly,
-        motionSpeedThreshold,
-        motionDisplacementThreshold,
-        particleBaseSize,
-        particleBaseOpacity,
-        particleSizeVariance,
-        particleOpacityVariance,
-        particleShape,
-        overrideThemeColor,
-        customParticleColor
-    } = this.config;
+        motion,
+        particles
+    } = this.config.render;
+
+    const {
+        enabled: renderMotionOnly,
+        speedThreshold: motionSpeedThreshold = 0.1,
+        displacementThreshold: motionDisplacementThreshold = 0.1
+    } = motion || { enabled: false };
+
+    const {
+        baseSize: particleBaseSize,
+        baseOpacity: particleBaseOpacity,
+        sizeVariance: particleSizeVariance,
+        opacityVariance: particleOpacityVariance,
+        shape: particleShape,
+        color: customParticleColor
+    } = particles;
+
+    const { radius: mouseInteractionRadius } = this.config.gravity;
 
     const themeColors = {
         neon: { r: 0, g: 255, b: 242 },
@@ -256,7 +271,7 @@ export class SpacetimeSimulation {
     };
 
     let baseR, baseG, baseB;
-    if (overrideThemeColor && customParticleColor) {
+    if (customParticleColor) {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(customParticleColor);
         if (result) {
             baseR = parseInt(result[1], 16);

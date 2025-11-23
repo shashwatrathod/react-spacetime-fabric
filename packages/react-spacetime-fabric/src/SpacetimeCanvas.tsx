@@ -33,12 +33,36 @@ export interface SpacetimeCanvasProps {
  * import { SpacetimeCanvas, SimulationConfig } from 'react-spacetime-fabric';
  * 
  * const config: SimulationConfig = {
- *   gridSpacing: 35,
- *   mouseForce: 10,
- *   mouseInteractionRadius: 280,
- *   enableSignalDelay: true,
- *   signalSpeed: 15,
- *   // ... other config options
+ *   grid: {
+ *     spacing: 35,
+ *     stiffness: 0.2,
+ *     damping: 0.9
+ *   },
+ *   gravity: {
+ *     strength: 10,
+ *     radius: 280,
+ *     divergence: 0,
+ *     activationLatency: 0
+ *   },
+ *   signal: {
+ *     enabled: true,
+ *     speed: 15
+ *   },
+ *   pulsing: {
+ *     enabled: false
+ *   },
+ *   render: {
+ *     points: true,
+ *     lines: true,
+ *     particles: {
+ *       baseSize: 3,
+ *       baseOpacity: 0.5,
+ *       sizeVariance: 0.5,
+ *       opacityVariance: 0.5,
+ *       shape: 'circle'
+ *     },
+ *     colorScheme: 'neon'
+ *   }
  * };
  * 
  * function App() {
@@ -68,11 +92,11 @@ const SpacetimeCanvas: React.FC<SpacetimeCanvasProps> = ({ config, className }) 
   // Update config when prop changes
   useEffect(() => {
     if (simulationRef.current) {
-        const oldSpacing = simulationRef.current.config.gridSpacing;
+        const oldSpacing = simulationRef.current.config.grid.spacing;
         simulationRef.current.setConfig(config);
         
         // Re-initialize grid if spacing changes
-        if (oldSpacing !== config.gridSpacing && canvasRef.current) {
+        if (oldSpacing !== config.grid.spacing && canvasRef.current) {
              simulationRef.current.resize(canvasRef.current.width, canvasRef.current.height);
         }
     }
@@ -118,7 +142,7 @@ const SpacetimeCanvas: React.FC<SpacetimeCanvasProps> = ({ config, className }) 
       lastFrameTimeRef.current = now;
 
       // Use the config from simulation instance to ensure we have the latest values
-      totalPhaseRef.current += dt * 1.25 * simulation.config.pulsingSpeed;
+      totalPhaseRef.current += dt * 1.25 * (simulation.config.pulsing.speed ?? 1);
 
       simulation.update(totalPhaseRef.current);
       simulation.draw(ctx);
