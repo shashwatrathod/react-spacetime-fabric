@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { SpacetimeCanvas, SimulationConfig } from './lib/SpacetimeCanvas';
+import { SpacetimeCanvas, SimulationConfig } from 'react-spacetime-fabric';
 import Documentation from './components/Documentation';
 
 const App: React.FC = () => {

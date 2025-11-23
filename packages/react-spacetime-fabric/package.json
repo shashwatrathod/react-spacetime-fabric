@@ -1,0 +1,52 @@
+{
+  "name": "react-spacetime-fabric",
+  "version": "0.1.0",
+  "description": "Interactive spacetime fabric simulation component for React with realistic physics",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "keywords": [
+    "react",
+    "spacetime",
+    "gravity",
+    "simulation",
+    "physics",
+    "canvas",
+    "general-relativity",
+    "visualization",
+    "animation"
+  ],
+  "author": "Shashwat Rathod",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shashwatrathod/react-spacetime-fabric"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tsup": "^8.0.0",
+    "typescript": "~5.8.2"
+  }
+}

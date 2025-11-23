@@ -3,18 +3,55 @@ import React, { useEffect, useRef } from 'react';
 import { SimulationConfig } from './types';
 import { SpacetimeSimulation } from './simulation';
 
+/**
+ * Props for the SpacetimeCanvas component
+ */
 export interface SpacetimeCanvasProps {
-  /** Configuration object for the simulation */
+  /**
+   * Configuration object for the simulation
+   * @see SimulationConfig for all available options
+   */
   config: SimulationConfig;
-  /** Optional className for the canvas element */
+  
+  /**
+   * Optional className for the canvas element
+   * If not provided, component uses inline styles for positioning
+   * @default undefined
+   */
   className?: string;
 }
 
 /**
  * SpacetimeCanvas Component
  * 
- * Renders a interactive spacetime fabric simulation on a canvas.
- * The simulation visualizes gravity, time dilation (via signal delay), and other relativistic effects.
+ * An interactive React component that renders a physics-based spacetime fabric simulation.
+ * The simulation visualizes gravitational effects, time dilation (via finite signal speed),
+ * and other relativistic phenomena on an HTML5 canvas.
+ * 
+ * @example
+ * ```tsx
+ * import { SpacetimeCanvas, SimulationConfig } from 'react-spacetime-fabric';
+ * 
+ * const config: SimulationConfig = {
+ *   gridSpacing: 35,
+ *   mouseForce: 10,
+ *   mouseInteractionRadius: 280,
+ *   enableSignalDelay: true,
+ *   signalSpeed: 15,
+ *   // ... other config options
+ * };
+ * 
+ * function App() {
+ *   return (
+ *     <div style={{ position: 'relative', width: '100vw', height: '100vh' }}>
+ *       <SpacetimeCanvas config={config} />
+ *     </div>
+ *   );
+ * }
+ * ```
+ * 
+ * @param props - Component props
+ * @returns A canvas element with the spacetime simulation
  */
 const SpacetimeCanvas: React.FC<SpacetimeCanvasProps> = ({ config, className }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -101,7 +138,17 @@ const SpacetimeCanvas: React.FC<SpacetimeCanvasProps> = ({ config, className }) 
   return (
     <canvas 
       ref={canvasRef} 
-      className={className || "absolute top-0 left-0 w-full h-full cursor-none touch-none"}
+      className={className}
+      style={{
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
+        cursor: 'none',
+        touchAction: 'none',
+        ...(!className && { /* Default styles only if no className provided */ })
+      }}
     />
   );
 };
